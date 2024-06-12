@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/developer-excercise/developer-excercise.iml" filepath="$PROJECT_DIR$/developer-excercise/developer-excercise.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/developer-excercise-vk.iml" filepath="$PROJECT_DIR$/.idea/developer-excercise-vk.iml" />
+    </modules>
+  </component>
+</project>
