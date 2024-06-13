@@ -10,7 +10,7 @@ create table products
 (
     product_id   int auto_increment
         primary key,
-    product_type varchar(50)              not null,
+    product_name varchar(50)              not null,
     price        decimal(10, 2)           not null,
     currency     varchar(3) default 'asw' not null
 );

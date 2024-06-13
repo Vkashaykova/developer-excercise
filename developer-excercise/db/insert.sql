@@ -1,4 +1,4 @@
-INSERT INTO `products` (product_type,price, currency) VALUES ('apple',0.50,'c'),
+INSERT INTO `products` (product_name,price, currency) VALUES ('apple',0.50,'c'),
                                                             ('banana',0.40,'c'),
                                                             ('tomato',0.30,'c'),
                                                             ('potato',0.26,'c');

@@ -11,8 +11,8 @@ public class Product {
     @Column(name = "product_id")
     private int productId;
 
-    @Column(name = "product_type")
-    private String productType;
+    @Column(name = "product_name")
+    private String productName;
 
     @Column(name = "price")
     private double price;
@@ -31,12 +31,12 @@ public class Product {
         this.productId = productId;
     }
 
-    public String getProductType() {
-        return productType;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public double getPrice() {
