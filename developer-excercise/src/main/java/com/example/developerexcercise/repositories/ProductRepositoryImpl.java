@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,6 +17,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Autowired
     public ProductRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return null;
     }
 
     @Override

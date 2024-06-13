@@ -1,5 +1,6 @@
 package com.example.developerexcercise.controllers.rest;
 
+import com.example.developerexcercise.exseptions.DuplicateEntityException;
 import com.example.developerexcercise.helpers.OrderMapper;
 import com.example.developerexcercise.models.Order;
 import com.example.developerexcercise.models.dtos.OrderDto;
@@ -59,6 +60,33 @@ public class OrderRestController {
             return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+    @PutMapping("/{orderId}")
+    public ResponseEntity<Order> updateOrder(@PathVariable int orderId,
+                                                                 @RequestBody OrderDto orderDto) {
+        try {
+            orderService.getOrderById(orderId);
+            Order updateOrder = orderMapper.fromDto(orderId, orderDto);
+            orderService.updateOrder(updateOrder);
+            return new ResponseEntity<>(updateOrder, HttpStatus.CREATED);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+
+    }
+
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<Order> deleteOrder(@PathVariable int orderId) {
+
+        try {
+            Order deleteOrder = orderService.getOrderById(orderId);
+            orderService.deleteOrder(deleteOrder);
+            return new ResponseEntity<>(deleteOrder, HttpStatus.CREATED);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
