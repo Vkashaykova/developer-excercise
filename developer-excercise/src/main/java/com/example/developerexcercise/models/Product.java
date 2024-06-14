@@ -1,7 +1,6 @@
 package com.example.developerexcercise.models;
 
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "products")
 public class Product {
@@ -15,7 +14,7 @@ public class Product {
     private String productName;
 
     @Column(name = "price")
-    private double price;
+    private int price;
 
     @Column(name = "currency")
     private String currency;
@@ -39,11 +38,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

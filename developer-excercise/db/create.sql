@@ -11,13 +11,13 @@ create table products
     product_id   int auto_increment
         primary key,
     product_name varchar(50)              not null,
-    price        decimal(10, 2)           not null,
+    price        int                      not null,
     currency     varchar(3) default 'asw' not null
 );
 
 create table orders_items
 (
-    id         int not null
+    id         int auto_increment
         primary key,
     order_id   int not null,
     product_id int null,
@@ -26,3 +26,4 @@ create table orders_items
     constraint orders_items_products_product_id_fk
         foreign key (product_id) references products (product_id)
 );
+

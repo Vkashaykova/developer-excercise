@@ -3,6 +3,7 @@ package com.example.developerexcercise.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -16,9 +17,9 @@ public class Order {
     private int orderId;
 
     @Column(name = "total_price")
-    private double totalPrice;
+    private int totalPrice;
 
-    @Column(name = "timestarmp")
+    @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -27,7 +28,7 @@ public class Order {
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    private List<Product> products;
+    private List<Product> products=new ArrayList<>();
 
 
     public Order() {
@@ -41,11 +42,11 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public double getTotalPrice() {
+    public int getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
+    public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
 

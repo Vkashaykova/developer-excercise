@@ -9,7 +9,7 @@ public interface ProductRepository {
 
     List<Product> getAllProducts();
 
-    Product getProductById(int productId);
+    Optional<Product> getProductById(int productId);
 
     Optional<Product> getProductByName(String name);
 

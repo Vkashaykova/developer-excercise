@@ -1,11 +1,9 @@
 package com.example.developerexcercise.controllers.rest;
 
-import com.example.developerexcercise.exseptions.DuplicateEntityException;
 import com.example.developerexcercise.helpers.OrderMapper;
 import com.example.developerexcercise.models.Order;
 import com.example.developerexcercise.models.dtos.OrderDto;
 import com.example.developerexcercise.services.contracts.OrderService;
-import com.example.developerexcercise.services.contracts.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +18,15 @@ import java.util.List;
 public class OrderRestController {
 
     private final OrderService orderService;
-    private final ProductService productService;
 
     private final OrderMapper orderMapper;
 
     @Autowired
-    public OrderRestController(OrderService orderService, ProductService productService, OrderMapper orderMapper) {
+    public OrderRestController(OrderService orderService, OrderMapper orderMapper) {
         this.orderService = orderService;
-        this.productService = productService;
         this.orderMapper = orderMapper;
     }
+
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
 
@@ -51,29 +48,37 @@ public class OrderRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<String> createOrderAndCalculatePrice(@RequestBody OrderDto orderDto) {
 
         try {
             Order newOrder = orderMapper.fromDto(orderDto);
-            orderService.createOrder(newOrder);
-            return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
+
+            int totalPrice = orderService.createOrder(newOrder);
+            int aws = totalPrice / 100;
+            int clouds = totalPrice % 100;
+            String formattedPrice = totalPrice + "clouds = " + aws + "." + String.format("%02d", clouds) + "aws";
+            return new ResponseEntity<>(formattedPrice, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
+
     @PutMapping("/{orderId}")
-    public ResponseEntity<Order> updateOrder(@PathVariable int orderId,
-                                                                 @RequestBody OrderDto orderDto) {
+    public ResponseEntity<String> updateOrder(@PathVariable int orderId,
+                                              @RequestBody OrderDto orderDto) {
         try {
             orderService.getOrderById(orderId);
             Order updateOrder = orderMapper.fromDto(orderId, orderDto);
-            orderService.updateOrder(updateOrder);
-            return new ResponseEntity<>(updateOrder, HttpStatus.CREATED);
+            int totalPrice = orderService.updateOrder(updateOrder);
+            int aws = totalPrice / 100;
+            int clouds = totalPrice % 100;
+            String formattedPrice = totalPrice + "clouds = " + aws + "." + String.format("%02d", clouds) + "aws";
+            return new ResponseEntity<>(formattedPrice, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
-
     }
 
     @DeleteMapping("/{orderId}")
@@ -85,10 +90,6 @@ public class OrderRestController {
             return new ResponseEntity<>(deleteOrder, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
-
-
-    }
+}

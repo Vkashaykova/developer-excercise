@@ -9,11 +9,11 @@ public interface OrderService {
 
     Order getOrderById(int orderId);
 
-    List<Order> getOrdersByProduct(int productId);
+    List<Order> getOrdersByProduct(String productName);
 
-    double createOrder(Order order);
+    int createOrder(Order order);
 
-    void updateOrder(Order order);
+    int updateOrder(Order order);
 
     void deleteOrder(Order order);
 

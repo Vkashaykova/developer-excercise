@@ -1,5 +1,7 @@
 package com.example.developerexcercise.services;
 
+import com.example.developerexcercise.exseptions.DuplicateEntityException;
+import com.example.developerexcercise.exseptions.EntityNotFoundException;
 import com.example.developerexcercise.models.Product;
 import com.example.developerexcercise.repositories.contracts.ProductRepository;
 import com.example.developerexcercise.services.contracts.ProductService;
@@ -20,31 +22,42 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        return productRepository.getAllProducts();
     }
 
     @Override
     public Product getProductById(int productId) {
-        return null;
+
+        return productRepository.getProductById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product", "id", String.valueOf(productId)));
     }
 
     @Override
     public Optional<Product> getProductByName(String name) {
-        return Optional.empty();
+        return productRepository.getProductByName(name);
     }
 
     @Override
     public void addProduct(Product product) {
-
+        Optional<Product> existingProduct = productRepository.getProductByName(product.getProductName());
+        if (existingProduct.isPresent()) {
+            throw new DuplicateEntityException("Product");
+        }
+        productRepository.addProduct(product);
     }
+
 
     @Override
     public void updateProduct(Product product) {
-
+        Optional<Product> existingProduct = productRepository.getProductById(product.getProductId());
+        if (existingProduct.isPresent()) {
+            throw new DuplicateEntityException("Product");
+        }
+        productRepository.updateProduct(product);
     }
 
     @Override
     public void deleteProduct(Product product) {
-
+         productRepository.deleteProduct(product);
     }
 }

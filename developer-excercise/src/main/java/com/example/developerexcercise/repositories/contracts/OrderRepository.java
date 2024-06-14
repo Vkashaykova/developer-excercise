@@ -3,13 +3,14 @@ package com.example.developerexcercise.repositories.contracts;
 import com.example.developerexcercise.models.Order;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository {
     List<Order> getAllOrders();
 
-    Order getOrderById(int orderId);
+    Optional<Order> getOrderById(int orderId);
 
-    List<Order> getOrdersByProduct(int productId);
+    Optional<List<Order>> getOrdersByProduct(int productId);
 
     void createOrder(Order order);
 

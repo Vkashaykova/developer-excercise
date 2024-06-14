@@ -23,7 +23,6 @@ public class OrderMapper {
         order.setOrderId(id);
 
         return order;
-
     }
 
     public Order fromDto(OrderDto dto) {
@@ -31,12 +30,10 @@ public class OrderMapper {
 
         for (String currentProduct : dto.getProducts()) {
             Optional<Product> product = productService.getProductByName(currentProduct);
-            if (product.isPresent()) {
-                order.getProducts().add(product.get());
-            }
-            order.setTimestamp(LocalDateTime.now());
+            product.ifPresent(value -> order.getProducts().add(value));
         }
-        return order;
+        order.setTimestamp(LocalDateTime.now());
 
+        return order;
     }
 }
