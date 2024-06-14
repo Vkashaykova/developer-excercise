@@ -23,6 +23,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> getAllProducts() {
+
         try (Session session = sessionFactory.openSession()) {
             Query<Product> query = session.createQuery
                     ("SELECT p from Product p", Product.class);
@@ -45,6 +46,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Optional<Product> getProductByName(String productName) {
+
         try (Session session = sessionFactory.openSession()) {
             Query<Product> query = session.createQuery
                     ("select p FROM Product p where p.productName = :productName", Product.class);
@@ -56,16 +58,17 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public void addProduct(Product product) {
+
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.persist(product);
             session.getTransaction().commit();
         }
-
     }
 
     @Override
     public void updateProduct(Product product) {
+
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(product);

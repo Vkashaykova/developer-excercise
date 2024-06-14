@@ -2,7 +2,6 @@ package com.example.developerexcercise.controllers.rest;
 
 import com.example.developerexcercise.exseptions.DuplicateEntityException;
 import com.example.developerexcercise.helpers.ProductMapper;
-import com.example.developerexcercise.models.Order;
 import com.example.developerexcercise.models.Product;
 import com.example.developerexcercise.models.dtos.ProductDto;
 import com.example.developerexcercise.services.contracts.ProductService;
@@ -47,6 +46,30 @@ public class ProductRestController {
             return new ResponseEntity<>(product, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/name/{productName}")
+    public ResponseEntity<Product> getProductByName(@PathVariable String productName) {
+
+        try {
+            Product product = productService.getProductByName(productName).get();
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto) {
+        try {
+            Product product = productMapper.fromDto(productDto);
+            productService.addProduct(product);
+            return new ResponseEntity<>(product, HttpStatus.CREATED);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 

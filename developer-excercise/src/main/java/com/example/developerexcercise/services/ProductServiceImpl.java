@@ -41,23 +41,22 @@ public class ProductServiceImpl implements ProductService {
     public void addProduct(Product product) {
         Optional<Product> existingProduct = productRepository.getProductByName(product.getProductName());
         if (existingProduct.isPresent()) {
-            throw new DuplicateEntityException("Product");
+            throw new DuplicateEntityException("Product", "name", product.getProductName());
         }
         productRepository.addProduct(product);
     }
 
-
     @Override
     public void updateProduct(Product product) {
         Optional<Product> existingProduct = productRepository.getProductById(product.getProductId());
-        if (existingProduct.isPresent()) {
-            throw new DuplicateEntityException("Product");
+        if (existingProduct.isPresent() && product.getPrice()==existingProduct.get().getPrice()) {
+            throw new DuplicateEntityException("Product","name", product.getProductName());
         }
         productRepository.updateProduct(product);
     }
 
     @Override
     public void deleteProduct(Product product) {
-         productRepository.deleteProduct(product);
+        productRepository.deleteProduct(product);
     }
 }
