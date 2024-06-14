@@ -142,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
      * @param products List of products in the order.
      * @return Total discounted price based on the "2 for 3" offer.
      */
-    private int calculateTwoForThreeDeal(List<Product> products) {
+    public int calculateTwoForThreeDeal(List<Product> products) {
         int totalPrice = 0;
         int minValue = Integer.MAX_VALUE;
 
