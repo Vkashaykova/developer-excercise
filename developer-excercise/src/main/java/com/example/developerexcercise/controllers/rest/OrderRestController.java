@@ -104,7 +104,7 @@ public class OrderRestController {
             int totalPrice = orderService.createOrder(newOrder);
             int aws = totalPrice / 100;
             int clouds = totalPrice % 100;
-            String formattedPrice = totalPrice + "clouds = " + aws + "." + String.format("%02d", clouds) + "aws";
+            String formattedPrice = totalPrice + " clouds = " + aws + "." + String.format("%02d", clouds) + " aws";
             return new ResponseEntity<>(formattedPrice, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
