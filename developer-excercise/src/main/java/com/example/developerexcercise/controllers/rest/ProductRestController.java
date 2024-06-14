@@ -14,6 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+/**
+ * REST controller for managing products.
+ */
 @RestController
 @RequestMapping("/api/products")
 public class ProductRestController {
@@ -21,12 +24,24 @@ public class ProductRestController {
     private final ProductService productService;
     private final ProductMapper productMapper;
 
+    /**
+     * Constructs an instance of ProductRestController with dependencies injected.
+     *
+     * @param productService The service handling product operations.
+     * @param productMapper  The mapper converting between ProductDto and Product entities.
+     */
     @Autowired
     public ProductRestController(ProductService productService, ProductMapper productMapper) {
         this.productService = productService;
         this.productMapper = productMapper;
     }
 
+    /**
+     * Retrieves all products.
+     *
+     * @return ResponseEntity containing a list of Product objects.
+     * @throws ResponseStatusException if no products are found.
+     */
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
 
@@ -38,6 +53,13 @@ public class ProductRestController {
         }
     }
 
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param productId ID of the product to retrieve.
+     * @return ResponseEntity containing the requested Product object.
+     * @throws ResponseStatusException if the product with the given ID is not found.
+     */
     @GetMapping("/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable int productId) {
 
@@ -49,6 +71,13 @@ public class ProductRestController {
         }
     }
 
+    /**
+     * Retrieves a product by its name.
+     *
+     * @param productName Name of the product to retrieve.
+     * @return ResponseEntity containing the requested Product object.
+     * @throws ResponseStatusException if the product with the given name is not found.
+     */
     @GetMapping("/name/{productName}")
     public ResponseEntity<Product> getProductByName(@PathVariable String productName) {
 
@@ -60,6 +89,13 @@ public class ProductRestController {
         }
     }
 
+    /**
+     * Creates a new product from the provided ProductDto.
+     *
+     * @param productDto DTO object containing product details.
+     * @return ResponseEntity containing the created Product object.
+     * @throws ResponseStatusException if a referenced entity (product) is not found or a duplicate product is found.
+     */
     @PostMapping
     public ResponseEntity<Product> addProduct(@RequestBody ProductDto productDto) {
         try {
@@ -73,6 +109,14 @@ public class ProductRestController {
         }
     }
 
+    /**
+     * Updates an existing product identified by its ID using data from the provided ProductDto.
+     *
+     * @param productId  ID of the product to update.
+     * @param productDto DTO object containing updated product details.
+     * @return ResponseEntity containing the updated Product object.
+     * @throws ResponseStatusException if the product with the given ID or a referenced entity (product) is not found, or a duplicate product is found.
+     */
     @PutMapping("/{productId}")
     public ResponseEntity<Product> updateProduct(@PathVariable int productId,
                                                  @RequestBody ProductDto productDto) {
@@ -88,6 +132,13 @@ public class ProductRestController {
         }
     }
 
+    /**
+     * Deletes a product identified by its ID.
+     *
+     * @param productId ID of the product to delete.
+     * @return ResponseEntity containing the deleted Product object.
+     * @throws ResponseStatusException if the product with the given ID or a referenced entity (product) is not found, or a duplicate product is found.
+     */
     @DeleteMapping("/{productId}")
     public ResponseEntity<Product> deleteProduct(@PathVariable int productId) {
 
@@ -97,8 +148,6 @@ public class ProductRestController {
             return new ResponseEntity<>(deleteProduct, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 
