@@ -11,16 +11,29 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of OrderRepository providing CRUD operations for Order entities using Hibernate.
+ */
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
 
     private final SessionFactory sessionFactory;
 
+    /**
+     * Constructs an instance of OrderRepositoryImpl with a Hibernate SessionFactory.
+     *
+     * @param sessionFactory Hibernate SessionFactory to create sessions.
+     */
     @Autowired
     public OrderRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    /**
+     * Retrieves all orders from the database.
+     *
+     * @return List of all Order entities.
+     */
     @Override
     public List<Order> getAllOrders() {
 
@@ -31,6 +44,12 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
+    /**
+     * Retrieves an order by its ID.
+     *
+     * @param orderId ID of the order to retrieve.
+     * @return Optional containing the Order entity if found, otherwise empty.
+     */
     @Override
     public Optional<Order> getOrderById(int orderId) {
 
@@ -43,6 +62,12 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
+    /**
+     * Retrieves orders containing a specific product.
+     *
+     * @param productId ID of the product to filter orders by.
+     * @return Optional containing a List of Order entities if found, otherwise empty.
+     */
     @Override
     public Optional<List<Order>> getOrdersByProduct(int productId) {
 
@@ -56,6 +81,11 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
+    /**
+     * Creates a new order in the database.
+     *
+     * @param order Order entity to create.
+     */
     @Override
     public void createOrder(Order order) {
 
@@ -66,6 +96,11 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
+    /**
+     * Updates an existing order in the database.
+     *
+     * @param order Updated Order entity.
+     */
     @Override
     public void updateOrder(Order order) {
 
@@ -76,6 +111,11 @@ public class OrderRepositoryImpl implements OrderRepository {
         }
     }
 
+    /**
+     * Deletes an existing order from the database.
+     *
+     * @param order Order entity to delete.
+     */
     @Override
     public void deleteOrder(Order order) {
 

@@ -13,22 +13,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implementation of OrderService providing business logic operations for orders.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
 
+    /**
+     * Constructs an instance of OrderServiceImpl with dependencies injected.
+     *
+     * @param orderRepository The repository handling order data access.
+     * @param productService  The service handling product operations.
+     */
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, ProductService productService) {
         this.orderRepository = orderRepository;
         this.productService = productService;
     }
 
+    /**
+     * Retrieves all orders.
+     *
+     * @return List of all Order objects.
+     */
     @Override
     public List<Order> getAllOrders() {
         return orderRepository.getAllOrders();
     }
 
+    /**
+     * Retrieves an order by its ID.
+     *
+     * @param orderId ID of the order to retrieve.
+     * @return The requested Order object.
+     * @throws EntityNotFoundException if the order with the given ID is not found.
+     */
     @Override
     public Order getOrderById(int orderId) {
 
@@ -37,6 +58,13 @@ public class OrderServiceImpl implements OrderService {
                         ("Order", "id", String.valueOf(orderId)));
     }
 
+    /**
+     * Retrieves orders containing a specific product.
+     *
+     * @param productName Name of the product to filter orders by.
+     * @return List of orders containing the specified product.
+     * @throws EntityNotFoundException if no orders contain the specified product.
+     */
     @Override
     public List<Order> getOrdersByProduct(String productName) {
         Product product = productService.getProductByName(productName).get();
@@ -46,6 +74,12 @@ public class OrderServiceImpl implements OrderService {
                         ("order", "product", productName));
     }
 
+    /**
+     * Creates a new order and calculates the total price based on product prices and offers.
+     *
+     * @param order Order object to create.
+     * @return Total price of the created order.
+     */
     public int createOrder(Order order) {
         int totalPrice = calculatePrice(order);
         order.setTotalPrice(totalPrice);
@@ -54,6 +88,12 @@ public class OrderServiceImpl implements OrderService {
         return order.getTotalPrice();
     }
 
+    /**
+     * Updates an existing order and recalculates the total price based on modified product list.
+     *
+     * @param order Updated Order object.
+     * @return Total price of the updated order.
+     */
     @Override
     public int updateOrder(Order order) {
         int totalPrice = calculatePrice(order);
@@ -63,13 +103,23 @@ public class OrderServiceImpl implements OrderService {
         return order.getTotalPrice();
     }
 
+    /**
+     * Deletes an order.
+     *
+     * @param order Order object to delete.
+     */
     @Override
     public void deleteOrder(Order order) {
         orderRepository.deleteOrder(order);
 
     }
 
-
+    /**
+     * Calculates the total price of an order based on product prices and applicable offers.
+     *
+     * @param order Order object for which to calculate the price.
+     * @return Total price of the order.
+     */
     private int calculatePrice(Order order) {
         List<Product> products = order.getProducts();
         int totalPrice;
@@ -86,6 +136,12 @@ public class OrderServiceImpl implements OrderService {
         return totalPrice;
     }
 
+    /**
+     * Calculates the total price applying the "2 for 3" deal on the first three products.
+     *
+     * @param products List of products in the order.
+     * @return Total discounted price based on the "2 for 3" offer.
+     */
     private int calculateTwoForThreeDeal(List<Product> products) {
         int totalPrice = 0;
         int minValue = Integer.MAX_VALUE;
@@ -101,6 +157,12 @@ public class OrderServiceImpl implements OrderService {
         return totalPrice - minValue;
     }
 
+    /**
+     * Calculates the total price applying the "Buy One, Get One Half Price" offer on remaining products.
+     *
+     * @param products List of products in the order (after the first three).
+     * @return Total discounted price based on the "Buy One, Get One Half Price" offer.
+     */
     private int calculateBuyOneGetOneHalfPrice(List<Product> products) {
         int totalPrice = 0;
         Map<String, Integer> productCount = new HashMap<>();
